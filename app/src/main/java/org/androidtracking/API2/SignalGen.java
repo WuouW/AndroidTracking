@@ -26,7 +26,7 @@ public class SignalGen{
 
         for (int frequency : frequencies) {
             for (int i = 0; i < numSamples; ++i) {
-                sample[i] += Math.cos(2 * Math.PI * i / (sampleRate / frequency));
+                sample[i] += Math.cos(2 * Math.PI * i / ((double)sampleRate / (double)frequency));
             }
         }
         for (int i = 0; i < numSamples; ++i) {
@@ -64,7 +64,4 @@ public class SignalGen{
         }
     }
 
-    public void run() {
-        playTone(3);
-    }
 }

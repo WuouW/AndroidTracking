@@ -49,12 +49,15 @@ public class SignalRecord{
         isRecording = true;
         recordingThread = new Thread(() -> {
             while (isRecording) {
-                audioRecord.read(audioData, 0, audioData.length);
+                int num = audioRecord.read(audioData, 0, audioData.length);
+                if(num != 0) {
+                    System.out.println("num: " + num);
+                }
             }
         });
         recordingThread.start();
 
-        audioRecord.stop();
+        //audioRecord.stop();
 
         System.out.println("record: down\n");
     }
@@ -62,6 +65,7 @@ public class SignalRecord{
     public void release() {
         isRecording = false;
         if (audioRecord != null) {
+            audioRecord.stop();
             audioRecord.release();
             audioRecord = null;
         }
@@ -71,7 +75,4 @@ public class SignalRecord{
         return audioData;
     }
 
-    public void run() {
-        recordAudio(3);
-    }
 }

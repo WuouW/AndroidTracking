@@ -47,7 +47,7 @@ public class AudioDeviceInfo implements DeviceInfo {
                 } catch (BrokenBarrierException | InterruptedException e) {
                     throw new RuntimeException(e);
                 }
-                signalGen.playTone(1);
+                signalGen.playTone(10);
             }
         });
         Thread threadRecord = new Thread(new Runnable() {
@@ -64,6 +64,12 @@ public class AudioDeviceInfo implements DeviceInfo {
 
         threadPlay.start();
         threadRecord.start();
+
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         try {
             threadPlay.join();
@@ -85,9 +91,14 @@ public class AudioDeviceInfo implements DeviceInfo {
         FreqResponseProcess processor = new FreqResponseProcess(sampleRate, frequencies);
         double[] normalizedFeatures = processor.process(recordedAudio);
 
+        for(int i = 0; i < recordedAudio.length; i++){
+            if(i < 5000)
+                System.out.println("audio " + i + " : " + recordedAudio[i]);
+        }
+
         //打印归一化后的特征向量
         for (double feature : normalizedFeatures) {
-            System.out.print(feature + " ");
+            System.out.println(feature);
         }
 
         return null;

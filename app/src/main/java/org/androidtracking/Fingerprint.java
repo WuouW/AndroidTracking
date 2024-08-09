@@ -28,6 +28,8 @@ public class Fingerprint {
     }
 
     private JSONObject merge(JSONObject o1, JSONObject o2) throws JSONException {
+        if(o2 == null)
+            return o1;
         Iterator<String> keys = o2.keys();
         while (keys.hasNext()) {
             String key = keys.next();
@@ -39,7 +41,6 @@ public class Fingerprint {
     public void generateFingerprint() throws JSONException {
         JSONObject fingerprintInfo = getFingerprintInfo();
         //TODO:生成指纹。注意指纹为成员变量
-        return;
     }
 
     public String getFingerprint(){

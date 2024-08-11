@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, 1);
         }
 
-        Fingerprint fp = new Fingerprint();
+        Fingerprint fp = new Fingerprint(this, this);
         try {
             fp.generateFingerprint();
         } catch (JSONException e) {

@@ -1,6 +1,7 @@
 package org.androidtracking.API2;
 
 import org.androidtracking.DeviceInfo;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.androidtracking.API2.FreqResponse.*;
 
@@ -97,10 +98,18 @@ public class AudioDeviceInfo implements DeviceInfo {
         }
 
         //打印归一化后的特征向量
-        for (double feature : normalizedFeatures) {
-            System.out.println(feature);
+        JSONObject audioInfo = new JSONObject();
+        try {
+            int idx = 1;
+            for (double feature : normalizedFeatures) {
+                System.out.println(feature);
+                audioInfo.put("audioInfo "+idx, feature);
+                idx++;
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
 
-        return null;
+        return audioInfo;
     }
 }

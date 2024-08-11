@@ -1,5 +1,8 @@
 package org.androidtracking;
 
+import android.app.Activity;
+import android.content.Context;
+
 import org.androidtracking.API1.BasicDeviceInfo;
 import org.androidtracking.API2.AudioDeviceInfo;
 import org.androidtracking.API3.SensorDeviceInfo;
@@ -12,11 +15,21 @@ import java.util.Iterator;
 public class Fingerprint {
     private String fingerprint;
 
+    private final Context context;
+    private final Activity activity;
+
+    public Fingerprint(Context context, Activity activity){
+        this.context = context;
+        this.activity = activity;
+    }
+
     private JSONObject getFingerprintInfo() throws JSONException {
         DeviceInfo info1 = new BasicDeviceInfo();
         DeviceInfo info2 = new AudioDeviceInfo();
         DeviceInfo info3 = new SensorDeviceInfo();
         DeviceInfo info4 = new WebAudioDeviceInfo();
+
+        ((BasicDeviceInfo) info1).setContextActivity(context, activity);
 
         JSONObject info4fp = new JSONObject();
         info4fp = merge(info4fp, info1.getInfo());
@@ -35,7 +48,7 @@ public class Fingerprint {
             String key = keys.next();
             o1.put(key, o2.get(key));
         }
-        return o2;
+        return o1;
     }
 
     public void generateFingerprint() throws JSONException {

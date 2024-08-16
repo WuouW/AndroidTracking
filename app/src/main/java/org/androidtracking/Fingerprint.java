@@ -30,6 +30,7 @@ public class Fingerprint {
         DeviceInfo info4 = new WebAudioDeviceInfo();
 
         ((BasicDeviceInfo) info1).setContextActivity(context, activity);
+        ((SensorDeviceInfo) info3).setContext(context);
 
         JSONObject info4fp = new JSONObject();
         info4fp = merge(info4fp, info1.getInfo());

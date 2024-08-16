@@ -1,6 +1,5 @@
-package org.androidtracking.API2;
+package org.androidtracking.API2.Feature;
 import java.util.Arrays;
-import java.util.stream.IntStream;
 
 public class MFCC {
 

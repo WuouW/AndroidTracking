@@ -6,11 +6,58 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="16dp">
+
     <TextView
-        android:id="@+id/test"
+        android:id="@+id/introduction"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         tools:ignore="MissingConstraints" />
+
+    <Button
+        android:id="@+id/buttonGetInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="信息获取"
+        tools:ignore="MissingConstraints" />
+
+    <!-- 定义隐藏的文本视图 -->
+    <TextView
+        android:id="@+id/textViewGetInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="信息获取完成"
+        android:visibility="gone"
+        tools:ignore="MissingConstraints" />
+
+    <Button
+        android:id="@+id/buttonNetTrans"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="网络传输"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/textViewNetTrans"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="网络传输完成"
+        android:visibility="gone"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/textViewNetTransERR"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="网络传输失败，请重试"
+        android:visibility="gone"
+        tools:ignore="MissingConstraints" />
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

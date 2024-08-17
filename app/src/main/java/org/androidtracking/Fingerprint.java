@@ -18,12 +18,14 @@ public class Fingerprint {
     private final Context context;
     private final Activity activity;
 
+    private JSONObject fingerprintInfo;
+
     public Fingerprint(Context context, Activity activity){
         this.context = context;
         this.activity = activity;
     }
 
-    private JSONObject getFingerprintInfo() throws JSONException {
+    private JSONObject generateFingerprintInfo() throws JSONException {
         DeviceInfo info1 = new BasicDeviceInfo();
         DeviceInfo info2 = new AudioDeviceInfo();
         DeviceInfo info3 = new SensorDeviceInfo();
@@ -53,8 +55,12 @@ public class Fingerprint {
     }
 
     public void generateFingerprint() throws JSONException {
-        JSONObject fingerprintInfo = getFingerprintInfo();
+        fingerprintInfo = generateFingerprintInfo();
         //TODO:生成指纹。注意指纹为成员变量
+    }
+
+    public JSONObject getFingerprintInfo(){
+        return fingerprintInfo;
     }
 
     public String getFingerprint(){

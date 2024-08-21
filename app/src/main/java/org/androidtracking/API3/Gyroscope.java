@@ -7,6 +7,9 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
+
+import java.util.Arrays;
 
 public class Gyroscope {
     private SensorManager sensorManager;
@@ -14,6 +17,7 @@ public class Gyroscope {
     private SensorEventListener gyroscopeListener;
     private float[] gyroscopeData = new float[3];
     private boolean isCollecting = false;
+    private static final String TAG = "gyroscope";
 
     public Gyroscope(Context context) {
         sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
@@ -21,7 +25,7 @@ public class Gyroscope {
     }
 
     public void startCollecting(GyroscopeDataCallback callback) {
-        if (isCollecting){
+        if (isCollecting) {
             return;
         }
 
@@ -32,30 +36,30 @@ public class Gyroscope {
                     gyroscopeData[0] = event.values[0];
                     gyroscopeData[1] = event.values[1];
                     gyroscopeData[2] = event.values[2];
-
+                    Log.d(TAG, Arrays.toString(gyroscopeData));
                     callback.onGyroscopeDataChanged(gyroscopeData[0], gyroscopeData[1], gyroscopeData[2]);
                 }
             }
 
             @Override
             public void onAccuracyChanged(Sensor sensor, int accuracy) {
+                Log.d(TAG + " Accuracy", String.valueOf(accuracy));
                 return;
             }
         };
+        sensorManager.registerListener(gyroscopeListener, gyroscopeSensor, SensorManager.SENSOR_DELAY_NORMAL);
 
-        sensorManager.registerListener(gyroscopeListener, gyroscopeSensor, SensorManager.SENSOR_DELAY_GAME);
         isCollecting = true;
 
         Handler handler = new Handler(Looper.getMainLooper());
-        Runnable task = new Runnable() {
-            @Override
-            public void run() {
-                handler.postDelayed(this, 5000);
-                stopCollecting();
-                callback.onDataCollectionFinished();
-            }
+        Runnable task = () -> {
+            stopCollecting();
+            Log.d(TAG,"finish collect");
+            callback.onDataCollectionFinished();
         };
-        task.run();
+        handler.postDelayed(task, 5000);
+
+
         /*handler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -66,7 +70,7 @@ public class Gyroscope {
     }
 
     public void stopCollecting() {
-        if (!isCollecting){
+        if (!isCollecting) {
             return;
         }
         sensorManager.unregisterListener(gyroscopeListener);
@@ -75,6 +79,7 @@ public class Gyroscope {
 
     public interface GyroscopeDataCallback {
         void onGyroscopeDataChanged(float x, float y, float z);
+
         void onDataCollectionFinished();
     }
 }

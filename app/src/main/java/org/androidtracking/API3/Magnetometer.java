@@ -6,6 +6,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Handler;
+import android.os.Looper;
 
 public class Magnetometer {
     private SensorManager sensorManager;
@@ -20,7 +21,7 @@ public class Magnetometer {
     }
 
     public void startCollecting(Magnetometer.MagnetometerDataCallback callback) {
-        if (isCollecting){
+        if (isCollecting) {
             return;
         }
 
@@ -45,17 +46,24 @@ public class Magnetometer {
         sensorManager.registerListener(magnetometerListener, magnetometerSensor, SensorManager.SENSOR_DELAY_GAME);
         isCollecting = true;
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                stopCollecting();
-                callback.onDataCollectionFinished();
-            }
+        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+            stopCollecting();
+            callback.onDataCollectionFinished();
         }, 5000);
+
+//        new Thread(() -> {
+//            try {
+//                Thread.sleep(5000);
+//            } catch (InterruptedException e) {
+//                throw new RuntimeException(e);
+//            }
+//            stopCollecting();
+//            callback.onDataCollectionFinished();
+//        }).start();
     }
 
     public void stopCollecting() {
-        if (!isCollecting){
+        if (!isCollecting) {
             return;
         }
         sensorManager.unregisterListener(magnetometerListener);
@@ -64,6 +72,7 @@ public class Magnetometer {
 
     public interface MagnetometerDataCallback {
         void onMagnetometerDataChanged(float x, float y, float z);
+
         void onDataCollectionFinished();
     }
 }

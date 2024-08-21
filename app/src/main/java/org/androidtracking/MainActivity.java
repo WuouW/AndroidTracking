@@ -59,16 +59,15 @@ public class MainActivity extends AppCompatActivity {
         buttonGetInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // 获取指纹
                 textViewGetInfo.setVisibility(View.INVISIBLE);
-                try {
-                    fp.generateFingerprint();
-                    fingerprintInfo = fp.getFingerprintInfo();
-                    fingerprint = fp.getFingerprint();
-                } catch (JSONException e) {
-                    throw new RuntimeException(e);
-                }
-                textViewGetInfo.setVisibility(View.VISIBLE);
+                fp.generateFingerprintInfo((res) -> {
+                    runOnUiThread(() -> {
+                        fingerprintInfo = fp.getFingerprintInfo();
+                        fingerprint = fp.getFingerprint();
+                        textViewGetInfo.setVisibility(View.VISIBLE);
+                    });
+                });
+
             }
         });
 
@@ -84,11 +83,11 @@ public class MainActivity extends AppCompatActivity {
                 FileTransfer fileTransfer = new FileTransfer();
                 fileTransfer.setDeviceInfo(fingerprintInfo);
                 // 在另一个线程中进行网络传输
-                new Thread(new Runnable(){
+                new Thread(new Runnable() {
                     @Override
                     public void run() {
                         int responseCode = fileTransfer.transfer();
-                        if(responseCode == 200) {
+                        if (responseCode == 200) {
                             // UI操作要在主线程中进行
                             runOnUiThread(new Runnable() {
                                 @Override

@@ -2,6 +2,7 @@ package org.androidtracking;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 
 import org.androidtracking.API1.BasicDeviceInfo;
 import org.androidtracking.API2.AudioDeviceInfo;
@@ -20,7 +21,7 @@ public class Fingerprint {
 
     private JSONObject fingerprintInfo;
 
-    public Fingerprint(Context context, Activity activity){
+    public Fingerprint(Context context, Activity activity) {
         this.context = context;
         this.activity = activity;
     }
@@ -37,14 +38,18 @@ public class Fingerprint {
         JSONObject info4fp = new JSONObject();
         info4fp = merge(info4fp, info1.getInfo());
         info4fp = merge(info4fp, info2.getInfo());
-        info4fp = merge(info4fp, info3.getInfo());
-        info4fp = merge(info4fp, info4.getInfo());
+        JSONObject info3Res = info3.getInfo();
+        Log.d("result", "info3Res: " + info3Res.toString());
+        info4fp = merge(info4fp, info3Res);
+        JSONObject info4Res = info4.getInfo();
+        Log.d("result", "info4Res: " + info4Res.toString());
+        info4fp = merge(info4fp, info4Res);
 
         return info4fp;
     }
 
     private JSONObject merge(JSONObject o1, JSONObject o2) throws JSONException {
-        if(o2 == null)
+        if (o2 == null)
             return o1;
         Iterator<String> keys = o2.keys();
         while (keys.hasNext()) {
@@ -59,11 +64,11 @@ public class Fingerprint {
         //TODO:生成指纹。注意指纹为成员变量
     }
 
-    public JSONObject getFingerprintInfo(){
+    public JSONObject getFingerprintInfo() {
         return fingerprintInfo;
     }
 
-    public String getFingerprint(){
+    public String getFingerprint() {
         return fingerprint;
     }
 }

@@ -54,11 +54,10 @@ public class Gyroscope {
         Handler handler = new Handler(Looper.getMainLooper());
         Runnable task = () -> {
             stopCollecting();
-            Log.d(TAG,"finish collect");
+            Log.d(TAG, "finish collect");
             callback.onDataCollectionFinished();
         };
         handler.postDelayed(task, 5000);
-
 
         /*handler.postDelayed(new Runnable() {
             @Override

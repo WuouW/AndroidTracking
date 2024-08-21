@@ -88,6 +88,7 @@ public class SensorDeviceInfo implements DeviceInfo {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        Log.d(TAG + " return", sensorInfo.toString());
         return sensorInfo;
     }
 

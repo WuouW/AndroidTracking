@@ -12,13 +12,19 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CountDownLatch;
 
 public class SensorDeviceInfo implements DeviceInfo {
     private Context context;
     private static final String TAG = "gyroscope sensor";
+    private CountDownLatch mLatch;
 
     public void setContext(Context context) {
         this.context = context;
+    }
+
+    public void setLatch(CountDownLatch latch) {
+        mLatch = latch;
     }
 
     @Override
@@ -29,6 +35,7 @@ public class SensorDeviceInfo implements DeviceInfo {
         // 特征
         JSONObject gyroscopeFeature = new JSONObject();
         JSONObject magnetometerFeature = new JSONObject();
+
 
         // 收集陀螺仪数据
         Gyroscope gyroscope = new Gyroscope(context);
@@ -46,14 +53,9 @@ public class SensorDeviceInfo implements DeviceInfo {
             @Override
             public void onDataCollectionFinished() {
                 gyroscope.stopCollecting();
+                mLatch.countDown();
             }
         });
-        // 处理陀螺仪数据并生成特征
-        try {
-            gyroscopeFeature = extractFeatures(gyroscopeInfo, "gyroscope");
-        } catch (JSONException e) {
-            Log.e(TAG, e.toString());
-        }
 
 
         // 收集磁力计数据
@@ -73,8 +75,18 @@ public class SensorDeviceInfo implements DeviceInfo {
             @Override
             public void onDataCollectionFinished() {
                 magnetometer.stopCollecting();
+                mLatch.countDown();
             }
         });
+
+
+        // 处理陀螺仪数据并生成特征
+        try {
+            gyroscopeFeature = extractFeatures(gyroscopeInfo, "gyroscope");
+
+        } catch (Exception e) {
+            Log.e(TAG, e.toString());
+        }
         //处理磁力计数据并生成特征
         try {
             magnetometerFeature = extractFeatures(magnetometerInfo, "magnetometer");
